@@ -13,19 +13,24 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Home Screen"),),
+        appBar: AppBar(
+          title: const Text("Home Screen"),
+        ),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextButton(
                   onPressed: () {
+                    print('log out');
                     context.read<AuthProvider>().logOut(context);
                   },
-                  child: const Text("Log Out",style: TextStyle(fontSize: 24,fontWeight: FontWeight.w700),))
+                  child: const Text(
+                    "Log Out",
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+                  ))
             ],
           ),
-        )
-    );
+        ));
   }
 }

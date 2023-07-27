@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -58,9 +57,11 @@ class SignUpScreen extends StatelessWidget {
             controller: TextEditingController(),
           ),
           const SizedBox(height: 24),
-          GlobalButton(title: "Sign up", onTap: () {
-            context.read<AuthProvider>().signUpUser(context);
-          }),
+          GlobalButton(
+              title: "Sign up",
+              onTap: () {
+                context.read<AuthProvider>().signUpUser(context);
+              }),
           const SizedBox(height: 24),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -70,7 +71,10 @@ class SignUpScreen extends StatelessWidget {
                     onChanged.call();
                     context.read<AuthProvider>().loginButtonPressed();
                   },
-                  child: Text("Log In",style: TextStyle(fontSize: 18.spMin),))
+                  child: Text(
+                    "Log In",
+                    style: TextStyle(fontSize: 18.spMin),
+                  ))
             ],
           )
         ],

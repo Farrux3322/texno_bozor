@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:texno_bozor/utils/colors.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
+
 class GlobalButton extends StatelessWidget {
   const GlobalButton({Key? key, required this.title, required this.onTap})
       : super(key: key);

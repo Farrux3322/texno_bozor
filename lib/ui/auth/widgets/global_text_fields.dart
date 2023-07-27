@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:texno_bozor/utils/colors.dart';
 
-
+// ignore: must_be_immutable
 class GlobalTextField extends StatefulWidget {
   GlobalTextField({
     Key? key,
@@ -25,7 +25,7 @@ class GlobalTextField extends StatefulWidget {
 }
 
 class _GlobalTextFieldState extends State<GlobalTextField> {
-  bool passwordVisible=false;
+  bool passwordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -41,18 +41,21 @@ class _GlobalTextFieldState extends State<GlobalTextField> {
       obscureText: widget.obscureText && passwordVisible,
       controller: widget.controller,
       decoration: InputDecoration(
-        suffixIcon:widget.obscureText ? IconButton(
-          icon: Icon(passwordVisible
-              ? Icons.visibility
-              : Icons.visibility_off,color: Colors.black,),
-          onPressed: () {
-            setState(
-                  () {
-                passwordVisible = !passwordVisible;
-              },
-            );
-          },
-        ):const SizedBox(),
+        suffixIcon: widget.obscureText
+            ? IconButton(
+                icon: Icon(
+                  passwordVisible ? Icons.visibility : Icons.visibility_off,
+                  color: Colors.black,
+                ),
+                onPressed: () {
+                  setState(
+                    () {
+                      passwordVisible = !passwordVisible;
+                    },
+                  );
+                },
+              )
+            : const SizedBox(),
         alignLabelWithHint: false,
         filled: true,
         fillColor: AppColors.white,

@@ -1,5 +1,5 @@
 name: texno_bozor
-description: A new Flutter project.
+description: A new sFlutter project.
 publish_to: 'none'
 version: 0.1.0
 
@@ -19,12 +19,12 @@ dependencies:
   zoom_tap_animation: ^1.1.0
   http: ^1.1.0
   provider: ^6.0.5
-
   firebase_core: ^2.15.0
   cloud_firestore: ^4.8.3
   firebase_auth: ^4.7.1
   firebase_storage: ^11.2.5
   lottie: ^2.5.0
+
 
 dev_dependencies:
   flutter_test:
@@ -34,6 +34,10 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+
   assets:
     - assets/images/
     - assets/svg/
+    - assets/fonts/
+
