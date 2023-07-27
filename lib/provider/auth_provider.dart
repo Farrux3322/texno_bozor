@@ -80,6 +80,9 @@ class AuthProvider with ChangeNotifier {
         showMessage(context, universalData.error);
       }
     }
+
+    emailController.clear();
+    passwordController.clear();
   }
 
   Future<void> signInWithGoogle(BuildContext context) async {
@@ -97,14 +100,6 @@ class AuthProvider with ChangeNotifier {
       }
     }
   }
-
-
-  manageMessage(BuildContext context, String error) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error)));
-    isLoading = false;
-    notifyListeners();
-  }
-
 
   notify(bool value) {
     isLoading = value;

@@ -8,6 +8,7 @@ import 'package:texno_bozor/ui/auth/widgets/global_button.dart';
 import 'package:texno_bozor/ui/auth/widgets/global_text_fields.dart';
 import 'package:texno_bozor/utils/app_icon.dart';
 import 'package:texno_bozor/utils/colors.dart';
+import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key, required this.onChanged});
@@ -91,7 +92,9 @@ class SignUpScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16),
                     color: AppColors.white
                 ),
-                child: SvgPicture.asset(AppIcon.apple),
+                child: ZoomTapAnimation(
+                    onTap: (){},
+                    child: SvgPicture.asset(AppIcon.apple)),
               ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 14.h,vertical: 14.h),
@@ -101,7 +104,11 @@ class SignUpScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16),
                     color: AppColors.white
                 ),
-                child: SvgPicture.asset(AppIcon.google),
+                child: ZoomTapAnimation(
+                    onTap: (){
+                      context.read<AuthProvider>().signInWithGoogle(context);
+                    },
+                    child: SvgPicture.asset(AppIcon.google)),
               ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 14.h,vertical: 14.h),
@@ -111,7 +118,9 @@ class SignUpScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16),
                     color: AppColors.white
                 ),
-                child: SvgPicture.asset(AppIcon.facebook),
+                child: ZoomTapAnimation(
+                    onTap: (){},
+                    child: SvgPicture.asset(AppIcon.facebook)),
               ),
             ],
           ),

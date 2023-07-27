@@ -42,10 +42,12 @@ class ProfileProvider with ChangeNotifier {
     String name = nameController.text;
     if (name.isNotEmpty) {
       FirebaseAuth.instance.currentUser?.updateDisplayName(name);
+      nameController.clear();
     } else {
       showMessage(context, "Username empty");
     }
   }
+
 
   updateUserImage(BuildContext context) {
     String photoUrl = "nameController.text";
