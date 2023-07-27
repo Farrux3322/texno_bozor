@@ -23,7 +23,7 @@ class _TabBoxScreenState extends State<TabBoxScreen> {
           elevation: 0,
           type: BottomNavigationBarType.fixed,
           unselectedItemColor: const Color(0xFF9B9B9B),
-          selectedItemColor: const Color(0xFFDB3022),
+          selectedItemColor:  Colors.blue,
           onTap: (onTab) {
             provider.getScreen(onTab);
           },

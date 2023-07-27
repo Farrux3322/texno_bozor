@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
               TextButton(
                   onPressed: () {
                     print('log out');
-                    context.read<AuthProvider>().logOut(context);
+                    context.read<AuthProvider>().logOutUser(context);
                   },
                   child: const Text(
                     "Log Out",
