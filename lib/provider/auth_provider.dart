@@ -105,4 +105,5 @@ class AuthProvider with ChangeNotifier {
 //       print('User is signed in!');
 //     }
 //   });
+
 // }
