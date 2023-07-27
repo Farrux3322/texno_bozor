@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:texno_bozor/widgets/test_counter_screen.dart';
+import 'package:texno_bozor/ui/on_bording_screen/login_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -52,8 +52,9 @@ class WelcomeScreen extends StatelessWidget {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const CounterScreen()));
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (context) => const LoginScreen()));
                         },
                         style: ButtonStyle(
                             shape: MaterialStateProperty.all(
