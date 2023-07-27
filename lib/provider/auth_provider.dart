@@ -95,14 +95,3 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
   }
 }
-
-// _checkAuthState() {
-//   // Stream<User?>
-//   FirebaseAuth.instance.authStateChanges().listen((User? user) {
-//     if (user == null) {
-//       print('User is currently signed out!');
-//     } else {
-//       print('User is signed in!');
-//     }
-//   });
-// }

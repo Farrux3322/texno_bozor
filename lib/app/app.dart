@@ -17,7 +17,6 @@ class App extends StatelessWidget {
           if (snapshot.hasError) {
             return Center(child: Text(snapshot.error.toString()));
           } else if (snapshot.data == null) {
-            print('>>>>>>>>>>>>>>>> app  screen ga kirdi');
             return const AuthScreen();
           } else {
             return const TabBoxScreen();
