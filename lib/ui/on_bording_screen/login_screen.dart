@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:texno_bozor/provider/auth_provider.dart';
 import 'package:texno_bozor/ui/on_bording_screen/registar_screen.dart';
 import 'package:texno_bozor/utils/images.dart';
 
@@ -22,9 +24,6 @@ class _LoginScreenState extends State<LoginScreen> {
           false; // Prevents focus if tap on eye
     });
   }
-
-  TextEditingController _eamilController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
               //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: TextField(
-                controller: _eamilController,
+                controller: context.read<AuthProvider>().emailController,
                 decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Phone number, email or username',
@@ -71,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 15),
               //padding: EdgeInsets.symmetric(horizontal: 15),
               child: TextField(
-                controller: _passwordController,
+                controller: context.read<AuthProvider>().passwordController,
                 keyboardType: TextInputType.visiblePassword,
                 obscureText: _obscured,
                 focusNode: textFieldFocusNode,
@@ -115,6 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         width: (300),
                         child: ElevatedButton(
                           onPressed: () {
+                            context.read<AuthProvider>().logIn(context);
                             print('qilindi log in ');
                           },
                           style: ButtonStyle(
@@ -140,8 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(
               height: 50,
             ),
-            Container(
-                child: Center(
+            Center(
               child: Row(
                 children: [
                   const Padding(
@@ -169,7 +168,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   )
                 ],
               ),
-            ))
+            )
           ],
         ),
       ),

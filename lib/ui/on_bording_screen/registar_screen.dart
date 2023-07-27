@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:texno_bozor/provider/auth_provider.dart';
 import 'package:texno_bozor/ui/on_bording_screen/login_screen.dart';
 import 'package:texno_bozor/utils/images.dart';
+import 'package:texno_bozor/widgets/tab_box.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -32,6 +35,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Padding(
                       padding: const EdgeInsets.all(12.0),
                       child: TextFormField(
+                        controller:
+                            context.read<AuthProvider>().userNameController,
                         decoration: const InputDecoration(
                             hintText: 'Enter first Name',
                             labelText: 'first named',
@@ -66,6 +71,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
+                        controller:
+                            context.read<AuthProvider>().emailController,
                         validator: (String? value) {
                           return (value != null && value.contains('@'))
                               ? 'Do not use the @ char.'
@@ -88,11 +95,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
+                        controller:
+                            context.read<AuthProvider>().passwordController,
                         decoration: const InputDecoration(
-                            hintText: 'Mobile',
-                            labelText: 'Mobile',
+                            hintText: 'Password',
+                            labelText: 'Password',
                             prefixIcon: Icon(
-                              Icons.phone,
+                              Icons.password,
                               color: Colors.grey,
                             ),
                             border: OutlineInputBorder(
@@ -115,7 +124,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               width: (300),
                               child: ElevatedButton(
                                 onPressed: () {
-                                  if (_formkey.currentState!.validate()) {}
+                                  // if (_formkey.currentState!.validate()) {
+
+                                  // }
+                                  context
+                                      .read<AuthProvider>()
+                                      .signUpUser(context);
+                                  Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const TabBarDemo()));
                                 },
                                 style: ButtonStyle(
                                     shape: MaterialStateProperty.all(
@@ -140,7 +158,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         padding: EdgeInsets.only(top: 20),
                         child: Center(
                           child: Text(
-                            'Or Sign Up Using',
+                            'Already have an account?',
                             style: TextStyle(fontSize: 18, color: Colors.black),
                           ),
                         ),
@@ -152,21 +170,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         child: Row(
                           children: [
                             SizedBox(
-                                height: 40,
-                                width: 40,
-                                child: Image.asset(
-                                  AppImages.google,
-                                  fit: BoxFit.cover,
-                                )),
-                            SizedBox(
-                              height: 70,
-                              width: 70,
-                              child: Image.asset(
-                                AppImages.google,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            SizedBox(
                               height: 40,
                               width: 40,
                               child: Image.asset(
@@ -174,27 +177,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 fit: BoxFit.cover,
                               ),
                             ),
+                            const SizedBox(
+                              width: 24,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const LoginScreen()));
+                              },
+                              child: const Text(
+                                'SIGN IN',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.blue),
+                              ),
+                            ),
                           ],
                         ),
                       ),
                     ),
-                    Center(
-                      child: Container(
-                        padding: const EdgeInsets.only(top: 60),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (context) => const LoginScreen()));
-                          },
-                          child: const Text(
-                            'SIGN IN',
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                    )
                   ],
                 )),
           ),

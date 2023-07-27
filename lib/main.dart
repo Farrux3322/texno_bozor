@@ -1,14 +1,17 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:texno_bozor/provider/onBoarding_provider.dart';
+import 'package:texno_bozor/provider/auth_provider.dart';
 import 'package:texno_bozor/ui/on_bording_screen/welcome_screen.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => OnBoardingProvider(counter: 0),
+          create: (context) => AuthProvider(),
           lazy: true,
         ),
       ],
