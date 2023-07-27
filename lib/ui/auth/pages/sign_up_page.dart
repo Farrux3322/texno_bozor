@@ -58,9 +58,11 @@ class SignUpScreen extends StatelessWidget {
             controller: TextEditingController(),
           ),
           const SizedBox(height: 24),
-          GlobalButton(title: "Sign up", onTap: () {
-            context.read<AuthProvider>().signUpUser(context);
-          }),
+          GlobalButton(
+              title: "Sign up",
+              onTap: () {
+                context.read<AuthProvider>().signUpUser(context);
+              }),
           const SizedBox(height: 24),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -70,7 +72,10 @@ class SignUpScreen extends StatelessWidget {
                     onChanged.call();
                     context.read<AuthProvider>().loginButtonPressed();
                   },
-                  child: Text("Log In",style: TextStyle(fontSize: 18.spMin),))
+                  child: Text(
+                    "Log In",
+                    style: TextStyle(fontSize: 18.spMin),
+                  ))
             ],
           )
         ],

@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:texno_bozor/provider/auth_provider.dart';
 import 'package:texno_bozor/ui/on_bording_screen/login_screen.dart';
 import 'package:texno_bozor/utils/images.dart';
-import 'package:texno_bozor/widgets/tab_box.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -73,11 +72,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: TextFormField(
                         controller:
                             context.read<AuthProvider>().emailController,
-                        validator: (String? value) {
-                          return (value != null && value.contains('@'))
-                              ? 'Do not use the @ char.'
-                              : null;
-                        },
                         decoration: const InputDecoration(
                             hintText: 'Email',
                             labelText: 'Email',
@@ -124,16 +118,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               width: (300),
                               child: ElevatedButton(
                                 onPressed: () {
-                                  // if (_formkey.currentState!.validate()) {
-
-                                  // }
                                   context
                                       .read<AuthProvider>()
-                                      .signUpUser(context);
-                                  Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const TabBarDemo()));
+                                      .loginButtonPressed();
                                 },
                                 style: ButtonStyle(
                                     shape: MaterialStateProperty.all(

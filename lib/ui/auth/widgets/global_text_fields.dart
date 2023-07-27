@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:texno_bozor/utils/colors.dart';
 
+// ignore: must_be_immutable
 class GlobalTextField extends StatefulWidget {
   GlobalTextField({
     Key? key,

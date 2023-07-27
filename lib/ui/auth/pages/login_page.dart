@@ -14,47 +14,49 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 25.w),
-      child: ListView(
-        children: [
-          Lottie.asset("assets/images/login.json"),
-          const SizedBox(height: 60),
-          GlobalTextField(
-              hintText: "Email",
+        padding: EdgeInsets.symmetric(horizontal: 25.w),
+        child: ListView(
+          children: [
+            Lottie.asset("assets/images/login.json"),
+            const SizedBox(height: 60),
+            GlobalTextField(
+                hintText: "Email",
+                keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.next,
+                textAlign: TextAlign.start,
+                controller: context.read<AuthProvider>().emailController),
+            const SizedBox(height: 24),
+            GlobalTextField(
+              obscureText: true,
+              hintText: "Password",
               keyboardType: TextInputType.emailAddress,
               textInputAction: TextInputAction.next,
               textAlign: TextAlign.start,
-              controller: context.read<AuthProvider>().emailController),
-          const SizedBox(height: 24),
-          GlobalTextField(
-            obscureText: true,
-            hintText: "Password",
-            keyboardType: TextInputType.emailAddress,
-            textInputAction: TextInputAction.next,
-            textAlign: TextAlign.start,
-            controller: context.read<AuthProvider>().passwordController,
-          ),
-          const SizedBox(height: 24),
-          GlobalButton(
-              title: "Log In",
-              onTap: () {
-                context.read<AuthProvider>().logIn(context);
-              }),
-          const SizedBox(height: 24),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              TextButton(
-                  onPressed: () {
-                    onChanged.call();
-                    context.read<AuthProvider>().signUpButtonPressed();
-                  },
-                  child:  Text("Sign Up",style: TextStyle(fontSize: 18.spMin),))
-            ],
-          ),
-          const SizedBox(height: 90),
-        ],
-      )
-    );
+              controller: context.read<AuthProvider>().passwordController,
+            ),
+            const SizedBox(height: 24),
+            GlobalButton(
+                title: "Log In",
+                onTap: () {
+                  context.read<AuthProvider>().logIn(context);
+                }),
+            const SizedBox(height: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                    onPressed: () {
+                      onChanged.call();
+                      context.read<AuthProvider>().signUpButtonPressed();
+                    },
+                    child: Text(
+                      "Sign Up",
+                      style: TextStyle(fontSize: 18.spMin),
+                    ))
+              ],
+            ),
+            const SizedBox(height: 90),
+          ],
+        ));
   }
 }
