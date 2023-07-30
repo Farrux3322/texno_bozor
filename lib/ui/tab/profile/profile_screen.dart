@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -34,184 +33,175 @@ class _ProfileScreenState extends State<ProfileScreen> {
               icon: const Icon(Icons.logout))
         ],
       ),
-      body: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(24),
-            child: ListView(
+      body:  Padding(
+        padding: const EdgeInsets.all(24),
+        child: ListView(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "My profile",
-                      style: TextStyle(
-                          fontSize: 32.spMin,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.white),
-                    ),
-                    IconButton(
-                        onPressed: () {
-                          setState(() {
-                            isEdit = !isEdit;
-                          });
-                        },
-                        icon: Icon(
-                          Icons.edit,
-                          size: 32.spMin,
-                          color: Colors.white,
-                        ))
-                  ],
+                Text(
+                  "My profile",
+                  style: TextStyle(
+                      fontSize: 32.spMin,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.white),
                 ),
-                SizedBox(
-                  height: 30.h,
-                ),
-                Center(
-                  child: Icon(
-                    Icons.person,
-                    size: 80.h,
-                    color: Colors.white,
-                  ),
-                ),
-                SizedBox(
-                  height: 40.h,
-                ),
-                Row(
-                  children: [
-                    Text(
-                      "Display name  : ",
-                      style: TextStyle(
-                          fontSize: 20.spMin,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500),
-                    ),
-                    Center(
-                      child: Text(
-                        user?.displayName ?? "",
-                        style: const TextStyle(
-                          fontSize: 24,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 40.h,
-                ),
-                Row(
-                  children: [
-                    Text(
-                      "Email address  : ",
-                      style: TextStyle(
-                          fontSize: 20.spMin,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500),
-                    ),
-                    Expanded(
-                      child: Center(
-                        child: Text(
-                          user?.email ?? "",
-                          style: TextStyle(
-                            fontSize: 14.spMin,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 40.h,
-                ),
-                Row(
-                  children: [
-                    Text(
-                      "Phone number  : ",
-                      style: TextStyle(
-                          fontSize: 20.spMin,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500),
-                    ),
-                    Center(
-                      child: Text(
-                        user?.phoneNumber ?? "Empty",
-                        style: const TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 40.h,
-                ),
-                Visibility(
-                  visible: isEdit,
-                  child: Column(
-                    children: [
-                      GlobalTextField(
-                        hintText: "Display Name",
-                        keyboardType: TextInputType.name,
-                        textInputAction: TextInputAction.next,
-                        textAlign: TextAlign.start,
-                        controller:
-                            context.read<ProfileProvider>().nameController,
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      GlobalTextField(
-                        hintText: "Email Update",
-                        keyboardType: TextInputType.emailAddress,
-                        textInputAction: TextInputAction.next,
-                        textAlign: TextAlign.start,
-                        controller:
-                            context.read<ProfileProvider>().emailController,
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      GlobalTextField(
-                        hintText: "Phone Update",
-                        keyboardType: TextInputType.phone,
-                        textInputAction: TextInputAction.next,
-                        textAlign: TextAlign.start,
-                        controller:
-                            context.read<ProfileProvider>().phoneController,
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      GlobalButton(
-                          title: "Save",
-                          onTap: () {
-                            context
-                                .read<ProfileProvider>()
-                                .updateUserDisplayName(context);
-                            context
-                                .read<ProfileProvider>()
-                                .updateEmail(context);
-                            // context.read<ProfileProvider>().updateEmail(context);
-                            setState(() {
-                              isEdit = false;
-                            });
-                          })
-                    ],
-                  ),
-                )
+                IconButton(
+                    onPressed: () {
+                      setState(() {
+                        isEdit = !isEdit;
+                      });
+                    },
+                    icon: Icon(
+                      Icons.edit,
+                      size: 32.spMin,
+                      color: Colors.white,
+                    ))
               ],
             ),
-          ),
-          Visibility(
-            visible: context.watch<ProfileProvider>().isLoading,
-            child: const Align(
-              alignment: Alignment.center,
-              child: CupertinoActivityIndicator(),
+            SizedBox(
+              height: 30.h,
             ),
-          ),
-        ],
+            Center(
+              child: Icon(
+                Icons.person,
+                size: 80.h,
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(
+              height: 40.h,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Display name  : ",
+                  style: TextStyle(
+                      fontSize: 20.spMin,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500),
+                ),
+                Center(
+                  child: Text(
+                    user?.displayName ?? "",
+                    style: const TextStyle(
+                      fontSize: 24,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 40.h,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Email address  : ",
+                  style: TextStyle(
+                      fontSize: 20.spMin,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500),
+                ),
+                Expanded(
+                  child: Center(
+                    child: Text(
+                      user?.email ?? "",
+                      style: TextStyle(
+                        fontSize: 14.spMin,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 40.h,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Phone number  : ",
+                  style: TextStyle(
+                      fontSize: 20.spMin,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500),
+                ),
+                Center(
+                  child: Text(
+                    user?.phoneNumber ?? "Empty",
+                    style: const TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 40.h,
+            ),
+            Visibility(
+              visible: isEdit,
+              child: Column(
+                children: [
+                  GlobalTextField(
+                    hintText: "Display Name",
+                    keyboardType: TextInputType.name,
+                    textInputAction: TextInputAction.next,
+                    textAlign: TextAlign.start,
+                    controller:
+                    context.read<ProfileProvider>().nameController,
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  GlobalTextField(
+                    hintText: "Email Update",
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
+                    textAlign: TextAlign.start,
+                    controller:
+                    context.read<ProfileProvider>().emailController,
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  GlobalTextField(
+                    hintText: "Phone Update",
+                    keyboardType: TextInputType.phone,
+                    textInputAction: TextInputAction.next,
+                    textAlign: TextAlign.start,
+                    controller:
+                    context.read<ProfileProvider>().phoneController,
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  GlobalButton(
+                      title: "Save",
+                      onTap: () {
+                        context
+                            .read<ProfileProvider>().updateUsername(context);
+                        context
+                            .read<ProfileProvider>()
+                            .updateEmail(context);
+                        // context.read<ProfileProvider>().updateEmail(context);
+                        setState(() {
+                          isEdit = false;
+                        });
+                      })
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

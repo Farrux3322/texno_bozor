@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:texno_bozor/data/fairbase/auth_service.dart';
 import 'package:texno_bozor/data/models/universal_data.dart';
+import 'package:texno_bozor/utils/ui_utils/error_massage_dialog.dart';
+import 'package:texno_bozor/utils/ui_utils/loading_dialog.dart';
 
 class AuthProvider with ChangeNotifier {
-
   AuthProvider({required this.firebaseServices});
 
+  final AuthService firebaseServices;
+
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController userNameController = TextEditingController();
-
-  bool isLoading = false;
-
-  final AuthService firebaseServices;
 
   loginButtonPressed() {
     passwordController.clear();
@@ -26,89 +26,96 @@ class AuthProvider with ChangeNotifier {
     emailController.clear();
   }
 
-  Stream<User?> listenAuthState() => FirebaseAuth.instance.authStateChanges();
-
   Future<void> signUpUser(BuildContext context) async {
-    String email = emailController.text;
-    String password = passwordController.text;
-    notify(true);
-    UniversalData universalData =
-    await firebaseServices.signUpUser(email: email, password: password);
-    notify(false);
+    if(passwordController.text==confirmPasswordController.text){
+      String email = emailController.text;
+      String password = passwordController.text;
+      showLoading(context: context);
+      UniversalData universalData =
+      await firebaseServices.signUpUser(email: email, password: password);
+      if (context.mounted) {
+        hideLoading(dialogContext: context);
+      }
 
-    if (universalData.error.isEmpty) {
-      if (context.mounted) {
-        showMessage(context, "User signed Up");
+      if (universalData.error.isEmpty) {
+        if (context.mounted) {
+          showConfirmMessage(message: "User signed Up", context: context);
+        }
+      } else {
+        if (context.mounted) {
+          showErrorMessage(message: universalData.error, context: context);
+        }
       }
-    } else {
-      if (context.mounted) {
-        showMessage(context, universalData.error);
-      }
+    }
+    else{
+      showErrorMessage(message: "Password Error", context: context);
     }
   }
 
+  Stream<User?> listenAuthState() => FirebaseAuth.instance.authStateChanges();
 
   Future<void> logInUser(BuildContext context) async {
     String email = emailController.text;
     String password = passwordController.text;
-    notify(true);
+    showLoading(context: context);
     UniversalData universalData =
     await firebaseServices.loginUser(email: email, password: password);
-    notify(false);
+    if (context.mounted) {
+      hideLoading(dialogContext: context);
+    }
 
     if (universalData.error.isEmpty) {
       if (context.mounted) {
-        showMessage(context, "User Logged in");
+        // showConfirmMessage(message: "User logged", context: context);
       }
     } else {
       if (context.mounted) {
-        showMessage(context, universalData.error);
+        showErrorMessage(message: universalData.error, context: context);
       }
     }
   }
 
   Future<void> logOutUser(BuildContext context) async {
-    notify(true);
+    showLoading(context: context);
     UniversalData universalData = await firebaseServices.logOutUser();
-    notify(false);
+    if (context.mounted) {
+      hideLoading(dialogContext: context);
+    }
     if (universalData.error.isEmpty) {
       if (context.mounted) {
-        showMessage(context, universalData.data as String);
+        showConfirmMessage(
+          message: universalData.data as String,
+          context: context,
+        );
       }
     } else {
       if (context.mounted) {
-        showMessage(context, universalData.error);
+        showErrorMessage(message: universalData.error, context: context);
       }
     }
-
-    emailController.clear();
     passwordController.clear();
+    confirmPasswordController.clear();
+    userNameController.clear();
+    emailController.clear();
   }
 
   Future<void> signInWithGoogle(BuildContext context) async {
-    notify(true);
+    showLoading(context: context);
     UniversalData universalData = await firebaseServices.signInWithGoogle();
-    notify(false);
+
+    if (context.mounted) {
+      hideLoading(dialogContext: context);
+    }
 
     if (universalData.error.isEmpty) {
       if (context.mounted) {
-        showMessage(context, "User Signed Up with Google.");
+        showConfirmMessage(
+            message: "User Signed Up with Google.", context: context);
       }
     } else {
       if (context.mounted) {
-        showMessage(context, universalData.error);
+        showErrorMessage(message: universalData.error, context: context);
       }
     }
-  }
-
-  notify(bool value) {
-    isLoading = value;
-    notifyListeners();
-  }
-
-  showMessage(BuildContext context, String error) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error)));
-    isLoading = false;
-    notifyListeners();
   }
 }

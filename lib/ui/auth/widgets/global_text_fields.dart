@@ -10,6 +10,7 @@ class GlobalTextField extends StatefulWidget {
     required this.textInputAction,
     required this.textAlign,
     this.obscureText = false,
+    this.isDescription = false,
     required this.controller,
   }) : super(key: key);
 
@@ -19,6 +20,7 @@ class GlobalTextField extends StatefulWidget {
   TextAlign textAlign;
   final bool obscureText;
   final TextEditingController controller;
+  final bool isDescription;
 
   @override
   State<GlobalTextField> createState() => _GlobalTextFieldState();
@@ -30,6 +32,7 @@ class _GlobalTextFieldState extends State<GlobalTextField> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      maxLines: widget.isDescription ? 5 : 1 ,
       style: const TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w600,

@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:texno_bozor/data/fairbase/auth_service.dart';
+import 'package:texno_bozor/data/fairbase/category_service.dart';
 import 'package:texno_bozor/data/fairbase/profile_service.dart';
 import 'package:texno_bozor/provider/auth_provider.dart';
 import 'package:texno_bozor/provider/profiles_provider.dart';
 import 'package:texno_bozor/provider/tab_provider.dart';
 import 'package:texno_bozor/splash/splash_screen.dart';
 import 'package:texno_bozor/utils/theme.dart';
+
+import 'provider/category_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,6 +30,11 @@ Future<void> main() async {
         ChangeNotifierProvider(
           create: (context) =>
               ProfileProvider(profileService: ProfileService()),
+          lazy: true,
+        ),
+        ChangeNotifierProvider(
+          create: (context) =>
+              CategoryProvider(categoryService: CategoryService()),
           lazy: true,
         ),
       ],

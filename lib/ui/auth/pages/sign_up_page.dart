@@ -58,7 +58,7 @@ class SignUpScreen extends StatelessWidget {
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.next,
             textAlign: TextAlign.start,
-            controller: TextEditingController(),
+            controller: context.read<AuthProvider>().confirmPasswordController,
           ),
           const SizedBox(height: 24),
           GlobalButton(

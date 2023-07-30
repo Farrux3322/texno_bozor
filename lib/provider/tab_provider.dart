@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:texno_bozor/ui/tab/bag/bag_screen.dart';
+import 'package:texno_bozor/ui/tab/category/category_screen.dart';
 import 'package:texno_bozor/ui/tab/favorite/favorite_screen.dart';
-import 'package:texno_bozor/ui/tab/home/home_screen.dart';
 import 'package:texno_bozor/ui/tab/profile/profile_screen.dart';
 import 'package:texno_bozor/ui/tab/shop/shop_screen.dart';
+
+import '../ui/home_screen.dart';
 
 class TabProvider with ChangeNotifier {
 
@@ -16,7 +18,7 @@ class TabProvider with ChangeNotifier {
   Widget? widget;
 
   void getWidgets(){
-    screens.add(const HomeScreen());
+    screens.add(const CategoriesScreen());
     screens.add(const ShopScreen());
     screens.add(const BagScreen());
     screens.add(const FavoriteScreen());
