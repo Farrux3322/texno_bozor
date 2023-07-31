@@ -8,14 +8,14 @@ import 'package:texno_bozor/ui/auth/widgets/global_button.dart';
 import 'package:texno_bozor/ui/auth/widgets/global_text_fields.dart';
 import 'package:texno_bozor/utils/colors.dart';
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+class ProfileUserScreen extends StatefulWidget {
+  const ProfileUserScreen({Key? key}) : super(key: key);
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<ProfileUserScreen> createState() => _ProfileUserScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileUserScreenState extends State<ProfileUserScreen> {
   bool isEdit = false;
 
   @override

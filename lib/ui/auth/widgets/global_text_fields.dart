@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:texno_bozor/utils/colors.dart';
 
 // ignore: must_be_immutable
@@ -11,6 +12,7 @@ class GlobalTextField extends StatefulWidget {
     required this.textAlign,
     this.obscureText = false,
     this.isDescription = false,
+    this.digit = false,
     required this.controller,
   }) : super(key: key);
 
@@ -18,6 +20,7 @@ class GlobalTextField extends StatefulWidget {
   TextInputType keyboardType;
   TextInputAction textInputAction;
   TextAlign textAlign;
+  final bool digit;
   final bool obscureText;
   final TextEditingController controller;
   final bool isDescription;
@@ -32,7 +35,11 @@ class _GlobalTextFieldState extends State<GlobalTextField> {
   @override
   Widget build(BuildContext context) {
     return TextField(
-      maxLines: widget.isDescription ? 5 : 1 ,
+      maxLines: widget.isDescription ? 5 : 1,
+       inputFormatters: widget.digit ? [
+        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+        LengthLimitingTextInputFormatter(10),
+      ]:[],
       style: const TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w600,

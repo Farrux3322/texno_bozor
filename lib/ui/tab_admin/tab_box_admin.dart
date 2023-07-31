@@ -1,19 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:texno_bozor/provider/tab_provider.dart';
+import 'package:texno_bozor/provider/tab_admin_provider.dart';
 
-class TabBoxScreen extends StatefulWidget {
-  const TabBoxScreen({super.key});
+class TabBoxAdminScreen extends StatefulWidget {
+  const TabBoxAdminScreen({super.key});
 
   @override
-  State<TabBoxScreen> createState() => _TabBoxScreenState();
+  State<TabBoxAdminScreen> createState() => _TabBoxAdminScreenState();
 }
 
-class _TabBoxScreenState extends State<TabBoxScreen> {
+class _TabBoxAdminScreenState extends State<TabBoxAdminScreen> {
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<TabProvider>(context, listen: true);
+    var provider = Provider.of<TabAdminProvider>(context, listen: true);
     return Scaffold(
       body: provider.widget,
       bottomNavigationBar: SizedBox(
@@ -30,14 +30,9 @@ class _TabBoxScreenState extends State<TabBoxScreen> {
           currentIndex: provider.currentIndex,
           items: const [
             BottomNavigationBarItem(
-                icon: Icon(Icons.home, size: 30), label: "Home"),
+                icon: Icon(Icons.category, size: 30), label: "Category"),
             BottomNavigationBarItem(
-                icon: Icon(Icons.shopping_cart, size: 30), label: "Shop"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.shopping_bag, size: 30), label: "Bag"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.favorite_border_outlined, size: 30),
-                label: "Favorites"),
+                icon: Icon(Icons.production_quantity_limits, size: 30), label: "Products"),
             BottomNavigationBarItem(
                 icon: Icon(Icons.person, size: 30), label: "Profile"),
           ],

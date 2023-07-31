@@ -10,66 +10,86 @@ class CategoryProvider with ChangeNotifier {
 
   final CategoryService categoryService;
 
-  final TextEditingController categoryName = TextEditingController();
-  final TextEditingController description = TextEditingController();
-
+  TextEditingController categoryNameController = TextEditingController();
+  TextEditingController categoryDescController = TextEditingController();
 
   Future<void> addCategory({
     required BuildContext context,
-    required CategoryModel categoryModel,
+    required String imageUrl,
   }) async {
+    String name = categoryNameController.text;
+    String categoryDesc = categoryDescController.text;
 
-    showLoading(context: context);
-    UniversalData universalData =
-    await categoryService.addCategory(categoryModel: categoryModel);
-    if (context.mounted) {
-      hideLoading(dialogContext: context);
-    }
-    if (universalData.error.isEmpty) {
+    if (name.isNotEmpty && categoryDesc.isNotEmpty) {
+      CategoryModel categoryModel = CategoryModel(
+        categoryId: "",
+        categoryName: name,
+        description: categoryDesc,
+        imageUrl: imageUrl,
+        createdAt: DateTime.now().toString(),
+      );
+      showLoading(context: context);
+      UniversalData universalData =
+      await categoryService.addCategory(categoryModel: categoryModel);
       if (context.mounted) {
-        showMessage(context, universalData.data as String);
+        hideLoading(dialogContext: context);
+      }
+      if (universalData.error.isEmpty) {
+        if (context.mounted) {
+          showMessage(context, universalData.data as String);
+          clearTexts();
+          Navigator.pop(context);
+        }
+      } else {
+        if (context.mounted) {
+          showMessage(context, universalData.error);
+        }
       }
     } else {
-      if (context.mounted) {
-        showMessage(context, universalData.error);
-      }
+      showMessage(context, "Maydonlar to'liq emas!!!");
     }
-    categoryName.clear();
-    description.clear();
   }
 
   Future<void> updateCategory({
     required BuildContext context,
-    required CategoryModel categoryModel,
+    required String imagePath,
+    required CategoryModel currentCategory,
   }) async {
-    showLoading(context: context);
-    UniversalData universalData =
-    await categoryService.updateCategory(categoryModel: categoryModel);
-    if (context.mounted) {
-      hideLoading(dialogContext: context);
-    }
-    if (universalData.error.isEmpty) {
-      if (context.mounted) {
-        showMessage(context, universalData.data as String);
-      }
-    } else {
-      if (context.mounted) {
-        showMessage(context, universalData.error);
-      }
-    }
+    String name = categoryNameController.text;
+    String categoryDesc = categoryDescController.text;
 
-    categoryName.clear();
-    description.clear();
-
+    if (name.isNotEmpty && categoryDesc.isNotEmpty) {
+      showLoading(context: context);
+      UniversalData universalData = await categoryService.updateCategory(
+          categoryModel: CategoryModel(
+            categoryId: currentCategory.categoryId,
+            createdAt: currentCategory.createdAt,
+            categoryName: categoryNameController.text,
+            description: categoryDescController.text,
+            imageUrl: imagePath,
+          ));
+      if (context.mounted) {
+        hideLoading(dialogContext: context);
+      }
+      if (universalData.error.isEmpty) {
+        if (context.mounted) {
+          showMessage(context, universalData.data as String);
+          clearTexts();
+          Navigator.pop(context);
+        }
+      } else {
+        if (context.mounted) {
+          showMessage(context, universalData.error);
+        }
+      }
+    }
   }
 
   Future<void> deleteCategory({
     required BuildContext context,
     required String categoryId,
   }) async {
-
     showLoading(context: context);
-
     UniversalData universalData =
     await categoryService.deleteCategory(categoryId: categoryId);
     if (context.mounted) {
@@ -96,5 +116,18 @@ class CategoryProvider with ChangeNotifier {
   showMessage(BuildContext context, String error) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error)));
     notifyListeners();
+  }
+
+  setInitialValues(CategoryModel categoryModel) {
+    categoryNameController =
+        TextEditingController(text: categoryModel.categoryName);
+    categoryDescController =
+        TextEditingController(text: categoryModel.description);
+    notifyListeners();
+  }
+
+  clearTexts() {
+    categoryDescController.clear();
+    categoryNameController.clear();
   }
 }

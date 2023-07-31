@@ -4,10 +4,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:texno_bozor/data/fairbase/auth_service.dart';
 import 'package:texno_bozor/data/fairbase/category_service.dart';
+import 'package:texno_bozor/data/fairbase/products_service.dart';
 import 'package:texno_bozor/data/fairbase/profile_service.dart';
 import 'package:texno_bozor/provider/auth_provider.dart';
+import 'package:texno_bozor/provider/products_provider.dart';
 import 'package:texno_bozor/provider/profiles_provider.dart';
-import 'package:texno_bozor/provider/tab_provider.dart';
+import 'package:texno_bozor/provider/tab_admin_provider.dart';
+import 'package:texno_bozor/provider/tab_user_provider.dart';
 import 'package:texno_bozor/splash/splash_screen.dart';
 import 'package:texno_bozor/utils/theme.dart';
 
@@ -24,7 +27,7 @@ Future<void> main() async {
           lazy: true,
         ),
         ChangeNotifierProvider(
-          create: (context) => TabProvider(),
+          create: (context) => TabAdminProvider(),
           lazy: true,
         ),
         ChangeNotifierProvider(
@@ -37,6 +40,17 @@ Future<void> main() async {
               CategoryProvider(categoryService: CategoryService()),
           lazy: true,
         ),
+        ChangeNotifierProvider(
+          create: (context) =>
+              ProductsProvider(productsService: ProductsService()),
+          lazy: true,
+        ),
+        ChangeNotifierProvider(
+          create: (context) =>
+              TabUserProvider(),
+          lazy: true,
+        ),
+
       ],
       child: const MyApp(),
     ),
