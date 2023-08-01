@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:texno_bozor/data/models/category/category_model.dart';
 import 'package:texno_bozor/provider/category_provider.dart';
+import 'package:texno_bozor/ui/tab_user/category/category_detail_screen/category_detail_screen.dart';
 
 class CategoryUserScreen extends StatefulWidget {
   const CategoryUserScreen({super.key});
@@ -39,6 +40,9 @@ class _CategoryUserScreenState extends State<CategoryUserScreen> {
                       color: Colors.blue.withOpacity(0.8),
                     ),
                     child: ListTile(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>CategoryDetailScreen(categoryModel: categoryModel)));
+                      },
                       leading: ClipRRect(
                         borderRadius: BorderRadius.circular(16),
                         child: CachedNetworkImage(
@@ -49,7 +53,7 @@ class _CategoryUserScreenState extends State<CategoryUserScreen> {
                           errorWidget: (context, url, error) => const Icon(Icons.error),
                         ),
                       ),
-                      title: Text(categoryModel.categoryName,style: TextStyle(fontSize: 24.spMin,color: Colors.white,fontWeight: FontWeight.w700),),
+                      title: Text(categoryModel.categoryName,style: TextStyle(fontSize: 24.spMin,color: Colors.black,fontWeight: FontWeight.w700),),
                       subtitle: Text(categoryModel.description,style: TextStyle(fontSize: 18.spMin,color: Colors.white,fontWeight: FontWeight.w500),),
                     ),
                   );

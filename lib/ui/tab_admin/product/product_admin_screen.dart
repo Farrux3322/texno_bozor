@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:texno_bozor/data/models/product/product_model.dart';
-import 'package:texno_bozor/provider/category_provider.dart';
 import 'package:texno_bozor/provider/products_provider.dart';
 import 'package:texno_bozor/ui/tab_admin/product/sub_screens/product_add_screen.dart';
 

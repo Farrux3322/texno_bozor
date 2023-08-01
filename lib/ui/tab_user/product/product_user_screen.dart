@@ -7,6 +7,8 @@ import 'package:texno_bozor/data/models/category/category_model.dart';
 import 'package:texno_bozor/data/models/product/product_model.dart';
 import 'package:texno_bozor/provider/category_provider.dart';
 import 'package:texno_bozor/provider/products_provider.dart';
+import 'package:texno_bozor/ui/tab_user/product/product_detail_screen/product_detail_screen.dart';
+import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
 class ProductsUserScreen extends StatefulWidget {
   const ProductsUserScreen({super.key});
@@ -43,45 +45,78 @@ class _ProductsUserScreenState extends State<ProductsUserScreen> {
                             child: Expanded(
                               child: ListView(
                                 scrollDirection: Axis.horizontal,
-                                children: List.generate(
-                                  snapshot.data!.length,
-                                      (index) {
-                                    CategoryModel categoryModel =
-                                    snapshot.data![index];
-                                    return GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          selectedCategoryId =
-                                              categoryModel.categoryId;
-                                        });
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(8),
-                                          color: selectedCategoryId ==
-                                              categoryModel.categoryId
-                                              ? Colors.yellowAccent
-                                              : Colors.white,
-                                        ),
-                                        height: 60,
-                                        margin: const EdgeInsets.all(5),
-                                        padding: const EdgeInsets.all(10),
-                                        child: Center(
-                                          child: Text(
-                                            categoryModel.categoryName,
-                                            style: TextStyle(
-                                              fontSize: 18.spMin,
-                                              color: selectedCategoryId ==
-                                                  categoryModel.categoryId
-                                                  ? Colors.red
-                                                  : Colors.black,
+                                children: [
+                                  GestureDetector(
+                                  onTap: () {
+                            setState(() {
+                            selectedCategoryId = "";
+                            });
+                            },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: selectedCategoryId ==
+                                      ""
+                                      ? Colors.yellowAccent
+                                      : Colors.white,
+                                ),
+                                height: 60,
+                                margin: const EdgeInsets.all(5),
+                                padding: const EdgeInsets.all(10),
+                                child: Center(
+                                  child: Text(
+                                    "All",
+                                    style: TextStyle(
+                                      fontSize: 18.spMin,
+                                      color: selectedCategoryId ==
+                                          ""
+                                          ? Colors.red
+                                          : Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                                  ...List.generate(
+                                    snapshot.data!.length,
+                                        (index) {
+                                      CategoryModel categoryModel =
+                                      snapshot.data![index];
+                                      return GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            selectedCategoryId =
+                                                categoryModel.categoryId;
+                                          });
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(8),
+                                            color: selectedCategoryId ==
+                                                categoryModel.categoryId
+                                                ? Colors.yellowAccent
+                                                : Colors.white,
+                                          ),
+                                          height: 60,
+                                          margin: const EdgeInsets.all(5),
+                                          padding: const EdgeInsets.all(10),
+                                          child: Center(
+                                            child: Text(
+                                              categoryModel.categoryName,
+                                              style: TextStyle(
+                                                fontSize: 18.spMin,
+                                                color: selectedCategoryId ==
+                                                    categoryModel.categoryId
+                                                    ? Colors.red
+                                                    : Colors.black,
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    );
-                                  },
-                                ),
+                                      );
+                                    },
+                                  ),
+                                ]
                               ),
                             ),
                           )
@@ -104,7 +139,7 @@ class _ProductsUserScreenState extends State<ProductsUserScreen> {
             child: Padding(
               padding: const EdgeInsets.all(18.0),
               child: StreamBuilder<List<ProductModel>>(
-                stream: context.read<ProductsProvider>().getProducts(),
+                stream: context.read<ProductsProvider>().getProductsById(categoryId: selectedCategoryId),
                 builder:
                     (BuildContext context, AsyncSnapshot<List<ProductModel>> snapshot) {
                   if (snapshot.hasData) {
@@ -119,39 +154,47 @@ class _ProductsUserScreenState extends State<ProductsUserScreen> {
                       children: [
                         ...List.generate(snapshot.data!.length, (index){
                           ProductModel productModel = snapshot.data![index];
-                          return Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16),
-                              color: Colors.blue.withOpacity(0.8)
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(16),
-                                  child: CachedNetworkImage(
-                                    height: 100.h,
-                                    width: 100.h,
-                                    imageUrl: productModel.productImages.first,
-                                    placeholder: (context, url) => const CupertinoActivityIndicator(),
-                                    errorWidget: (context, url, error) => const Icon(Icons.error),
+                          return ZoomTapAnimation(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductDetailScreen(productModel: productModel,index: index,)));
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                color: Colors.blue.withOpacity(0.8)
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Hero(
+                                    tag: index,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(16),
+                                      child: CachedNetworkImage(
+                                        height: 100.h,
+                                        width: 100.h,
+                                        imageUrl: productModel.productImages.first,
+                                        placeholder: (context, url) => const CupertinoActivityIndicator(),
+                                        errorWidget: (context, url, error) => const Icon(Icons.error),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                                SizedBox(height: 10.h,),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(productModel.productName,style: TextStyle(fontSize: 22.spMin,color: Colors.white,fontWeight: FontWeight.w700),),
-                                    SizedBox(height: 10.h,),
-                                    Text(productModel.description,style: TextStyle(fontSize: 18.spMin,color: Colors.white,fontWeight: FontWeight.w500),),
-                                    SizedBox(height: 10.h,),
-                                    Text("Price: ${productModel.price} ${productModel.currency}",style: TextStyle(fontSize: 18.spMin,color: Colors.white,fontWeight: FontWeight.w500),),
-                                    SizedBox(height: 10.h,),
-                                    Text("Count: ${productModel.count}",style: TextStyle(fontSize: 18.spMin,color: Colors.white,fontWeight: FontWeight.w500),),
-                                  ],
-                                ),
-                              ],
+                                  SizedBox(height: 10.h,),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Text(productModel.productName,style: TextStyle(fontSize: 22.spMin,color: Colors.black,fontWeight: FontWeight.w700),),
+                                      SizedBox(height: 10.h,),
+                                      Text(productModel.description,style: TextStyle(fontSize: 18.spMin,color: Colors.white,fontWeight: FontWeight.w500),),
+                                      SizedBox(height: 10.h,),
+                                      Text("Price: ${productModel.price} ${productModel.currency}",style: TextStyle(fontSize: 18.spMin,color: Colors.white,fontWeight: FontWeight.w500),),
+                                      SizedBox(height: 10.h,),
+                                      Text("Count: ${productModel.count}",style: TextStyle(fontSize: 18.spMin,color: Colors.white,fontWeight: FontWeight.w500),),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           );
                         })

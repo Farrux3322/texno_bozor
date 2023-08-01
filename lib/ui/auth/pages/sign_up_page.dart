@@ -23,7 +23,7 @@ class SignUpScreen extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 25.w),
       child: ListView(
         children: [
-          Lottie.asset("assets/images/sign.json"),
+          Lottie.asset("assets/images/sign.json",height: 220.h),
           const SizedBox(
             height: 24,
           ),
