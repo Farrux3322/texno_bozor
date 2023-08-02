@@ -1,8 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import 'package:texno_bozor/data/models/order/order_model.dart';
 import 'package:texno_bozor/data/models/product/product_model.dart';
+import 'package:texno_bozor/provider/order_provider.dart';
 import 'package:texno_bozor/ui/auth/widgets/global_button.dart';
 
 
@@ -14,9 +18,13 @@ class ProductDetailScreen extends StatefulWidget {
 
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
+
+
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
+
+  int count = 1;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,10 +60,65 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 Text("Count: ${widget.productModel.count}",style: TextStyle(fontSize: 22.spMin,color: Colors.white,fontWeight: FontWeight.w500),),
                 SizedBox(height: 20.h,),
                 Text("Price: ${widget.productModel.price} ${widget.productModel.currency}",style: TextStyle(fontSize: 22.spMin,color: Colors.white,fontWeight: FontWeight.w500),),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        if (count > 1) {
+                          setState(() {
+                            count--;
+                          });
+                        }
+                      },
+                      child: const Icon(
+                        Icons.remove,
+                      ),
+                    ),
+                    Text(
+                      count.toString(),
+                      style: const TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    TextButton(
+                        onPressed: () {
+                          if ((count + 1) <= widget.productModel.count) {
+                            setState(() {
+                              count++;
+                            });
+                          }
+                        },
+                        child: const Icon(Icons.add)),
+                  ],
+                ),
+                Text(
+                  "Total price: ${widget.productModel.price * count}.   ${widget.productModel.currency}",
+                  style: const TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600),
+                ),
+
               ],
             ),
             ),
-            GlobalButton(onTap: (){},title: "Add to Card",)
+            GlobalButton(onTap: (){
+              Provider.of<OrderProvider>(context, listen: false).addOrder(
+                context: context,
+                orderModel: OrderModel(
+                  count: count,
+                  totalPrice: widget.productModel.price * count,
+                  orderId: "",
+                  productId: widget.productModel.productId,
+                  userId: FirebaseAuth.instance.currentUser!.uid,
+                  orderStatus: "ordered",
+                  createdAt: DateTime.now().toString(),
+                  productName: widget.productModel.productName,
+                ),
+              );
+            },title: "Add to Card",)
           ],
         ),
       ),

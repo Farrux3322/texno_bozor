@@ -39,7 +39,7 @@ class _ProductsAdminScreenState extends State<ProductsAdminScreen> {
       body: Padding(
         padding: const EdgeInsets.all(18.0),
         child: StreamBuilder<List<ProductModel>>(
-          stream: context.read<ProductsProvider>().getProducts(),
+          stream: context.read<ProductsProvider>().getProducts(""),
           builder:
               (BuildContext context, AsyncSnapshot<List<ProductModel>> snapshot) {
             if (snapshot.hasData) {

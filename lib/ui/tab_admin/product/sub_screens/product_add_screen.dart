@@ -13,7 +13,6 @@ import 'package:texno_bozor/provider/products_provider.dart';
 import 'package:texno_bozor/ui/auth/widgets/global_button.dart';
 import 'package:texno_bozor/ui/auth/widgets/global_text_fields.dart';
 import 'package:texno_bozor/ui/tab_admin/category/utils/utils.dart';
-import 'package:texno_bozor/utils/ui_utils/loading_dialog.dart';
 
 class ProductAddScreen extends StatefulWidget {
   ProductAddScreen({super.key, this.productModel});
@@ -26,48 +25,53 @@ class ProductAddScreen extends StatefulWidget {
 
 class _ProductAddScreenState extends State<ProductAddScreen> {
 
-  String? _imageUrl;
-  File? image;
-  Future pickImage() async {
-    try {
-      showLoading(context: context);
-      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-      if(context.mounted){
-        hideLoading(dialogContext: context);
-      }
-      if (image == null) return;
-      final imageTemp = File(image.path);
-      setState(() => this.image = imageTemp);
-    // ignore: empty_catches
-    } on PlatformException catch (e) {
-    }
+  ImagePicker picker = ImagePicker();
+
+  void showBottomSheetDialog() {
+    showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          padding: const EdgeInsets.all(24),
+          height: 200,
+          decoration: const BoxDecoration(
+            color: Colors.green,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16),
+            ),
+          ),
+          child: Column(
+            children: [
+              ListTile(
+                onTap: () {
+                  _getFromGallery();
+                  Navigator.pop(context);
+                },
+                leading: const Icon(Icons.photo),
+                title: const Text("Select from Gallery"),
+              )
+            ],
+          ),
+        );
+      },
+    );
   }
-  Future pickCamera() async {
-    try {
-      showLoading(context: context);
-      final image = await ImagePicker().pickImage(source: ImageSource.camera);
-      if(context.mounted){
-        hideLoading(dialogContext: context);
-      }
-      if (image == null) return;
-      final imageTemp = File(image.path);
-      setState(() => this.image = imageTemp);
-    } on PlatformException catch (e) {
-      if (kDebugMode) {
-        print('Failed to pick image: $e');
-      }
-    }
+
+  Future<void> _getFromGallery() async {
+    List<XFile> xFiles = await picker.pickMultiImage(
+      maxHeight: 512,
+      maxWidth: 512,
+    );
+    await Provider.of<ProductsProvider>(context, listen: false)
+        .uploadProductImages(
+      context: context,
+      images: xFiles,
+    );
   }
-  Future<void> _uploadImage() async {
-    showLoading(context: context);
-    String? downloadUrl = await uploadImageToFirebase(image);
-    if(context.mounted){
-      hideLoading(dialogContext: context);
-    }
-    setState(() {
-      _imageUrl = downloadUrl;
-    });
-  }
+
+
   String currency = "";
 
   List<String> currencies = ["UZS", "USD", "RUB"];
@@ -77,18 +81,10 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
 
 
   @override
-  void initState() {
-    if (widget.productModel != null) {
-      context.read<ProductsProvider>().setInitialValues(widget.productModel!);
-    }
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Provider.of<ProductsProvider>(context, listen: false).clearTexts();
+        Provider.of<ProductsProvider>(context, listen: false).clearParameters();
         return true;
       },
       child: Scaffold(
@@ -102,7 +98,7 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
             ),
             onPressed: () {
               Provider.of<ProductsProvider>(context, listen: false)
-                  .clearTexts();
+                  .clearParameters();
               Navigator.pop(context);
             },
           ),
@@ -245,97 +241,110 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
                     },
                   ),
                   const SizedBox(height: 24),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
+                  context.watch<ProductsProvider>().uploadedImagesUrls.isEmpty
+                      ? TextButton(
+                    onPressed: () {
+                      showBottomSheetDialog();
+                    },
+                    style: TextButton.styleFrom(
+                        backgroundColor:
+                        Theme.of(context).indicatorColor),
+                    child: const Text(
+                      "Select Image",
+                      style: TextStyle(color: Colors.black),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  )
+                      : SizedBox(
+                    height: 100,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
                       children: [
-                        SizedBox(
-                          height: 60,
-                          width: 180,
-                          child: TextButton(
-                            onPressed: () async {
-                              await pickImage();
-                            },
-                            style: TextButton.styleFrom(
-                                backgroundColor: Colors.blue),
-                            child: const Text(
-                              "Image",
-                              style: TextStyle(color: Colors.white),
+                        ...List.generate(
+                            context
+                                .watch<ProductsProvider>()
+                                .uploadedImagesUrls
+                                .length, (index) {
+                          String singleImage = context
+                              .watch<ProductsProvider>()
+                              .uploadedImagesUrls[index];
+                          return Container(
+                            padding: const EdgeInsets.all(5),
+                            margin: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 50.w,
-                        ),
-                        if (image != null)
-                          Image.file(
-                            File(
-                              image!.path,
+                            child: Image.network(
+                              singleImage,
+                              width: 80,
+                              height: 80,
+                              fit: BoxFit.fill,
                             ),
-                            height: 100.h,
-                            width: 50.w,
-                          ),
+                          );
+                        })
                       ],
                     ),
                   ),
+
+                  Visibility(
+                    visible: context.watch<ProductsProvider>().uploadedImagesUrls.isNotEmpty,
+                    child: TextButton(
+                      onPressed: () {
+                        showBottomSheetDialog();
+                      },
+                      style: TextButton.styleFrom(
+                          backgroundColor:
+                          Theme.of(context).indicatorColor),
+                      child: const Text(
+                        "Select Image",
+                        style: TextStyle(color: Colors.black),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),),
+
                   const SizedBox(height: 24),
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: GlobalButton(
-                  title: widget.productModel == null
-                      ? "Add product"
-                      : "Update product",
-                  onTap: () async{
-                    await _uploadImage();
-                    if (_imageUrl != null &&
-                        selectedCategoryId.isNotEmpty) {
-                      if(widget.productModel==null){
-                        if(context.mounted){
-                          context.read<ProductsProvider>().addProduct(
-                            context: context,
-                            imageUrls: [_imageUrl!],
-                            categoryId: selectedCategoryId,
-                            productCurrency: selectedCurrency,
-                          );
-                        }
-                      }else{
-                        if(context.mounted){
-                          context.read<ProductsProvider>().updateProduct(
-                            context: context,
-                            imageUrls: [_imageUrl!],
-                            categoryId: selectedCategoryId,
-                            productCurrency: selectedCurrency,
-                          );
-                        }
-                      }
-                    } else {
-                      if(context.mounted){
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            duration: Duration(milliseconds: 500),
-                            backgroundColor: Colors.red,
-                            margin: EdgeInsets.symmetric(
-                              vertical: 100,
-                              horizontal: 20,
-                            ),
-                            behavior: SnackBarBehavior.floating,
-                            content: Text(
-                              "Ma'lumotlar to'liq emas!!!",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 22,
-                              ),
-                            ),
+            GlobalButton(
+                title: widget.productModel == null
+                    ? "Add product"
+                    : "Update product",
+                onTap: () {
+                  if (context
+                      .read<ProductsProvider>()
+                      .uploadedImagesUrls
+                      .isNotEmpty &&
+                      selectedCategoryId.isNotEmpty) {
+                    context.read<ProductsProvider>().addProduct(
+                      context: context,
+                      categoryId: selectedCategoryId,
+                      productCurrency: selectedCurrency,
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        duration: Duration(milliseconds: 500),
+                        backgroundColor: Colors.red,
+                        margin: EdgeInsets.symmetric(
+                          vertical: 100,
+                          horizontal: 20,
+                        ),
+                        behavior: SnackBarBehavior.floating,
+                        content: Text(
+                          "Ma'lumotlar to'liq emas!!!",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 22,
                           ),
-                        );
-                      }
-                    }
-                  }),
-            ),
+                        ),
+                      ),
+                    );
+                  }
+                }),
             SizedBox(height: 20.h,)
           ],
         ),

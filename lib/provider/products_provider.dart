@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:texno_bozor/data/fairbase/products_service.dart';
 import 'package:texno_bozor/data/models/category/category_model.dart';
 import 'package:texno_bozor/data/models/product/product_model.dart';
 import 'package:texno_bozor/data/models/universal_data.dart';
+import 'package:texno_bozor/data/upload_service.dart';
 import 'package:texno_bozor/utils/ui_utils/loading_dialog.dart';
 
 class ProductsProvider with ChangeNotifier {
@@ -16,11 +18,12 @@ class ProductsProvider with ChangeNotifier {
   TextEditingController productDescController = TextEditingController();
   TextEditingController productCountController = TextEditingController();
 
+  List<String> uploadedImagesUrls = [];
+
   Future<void> addProduct({
     required BuildContext context,
     required String categoryId,
     required String productCurrency,
-    required List<String> imageUrls,
   }) async {
     String name = productNameController.text;
     String productDesc = productDescController.text;
@@ -31,10 +34,11 @@ class ProductsProvider with ChangeNotifier {
         productDesc.isNotEmpty &&
         priceText.isNotEmpty &&
         countText.isNotEmpty) {
+
       ProductModel productModel = ProductModel(
         count: int.parse(countText),
         price: int.parse(priceText),
-        productImages: imageUrls,
+        productImages: uploadedImagesUrls,
         categoryId: categoryId,
         productId: "",
         productName: name,
@@ -45,14 +49,14 @@ class ProductsProvider with ChangeNotifier {
 
       showLoading(context: context);
       UniversalData universalData =
-          await productsService.addProduct(productModel: productModel);
+      await productsService.addProduct(productModel: productModel);
       if (context.mounted) {
         hideLoading(dialogContext: context);
       }
       if (universalData.error.isEmpty) {
         if (context.mounted) {
           showMessage(context, universalData.data as String);
-          clearTexts();
+          clearParameters();
           Navigator.pop(context);
         }
       } else {
@@ -71,7 +75,7 @@ class ProductsProvider with ChangeNotifier {
   }) async {
     showLoading(context: context);
     UniversalData universalData =
-        await productsService.deleteProduct(productId: productId);
+    await productsService.deleteProduct(productId: productId);
     if (context.mounted) {
       hideLoading(dialogContext: context);
     }
@@ -86,29 +90,23 @@ class ProductsProvider with ChangeNotifier {
     }
   }
 
-  Stream<List<ProductModel>> getProducts() =>
-      FirebaseFirestore.instance.collection("products").snapshots().map(
-            (event1) => event1.docs
-                .map((doc) => ProductModel.fromJson(doc.data()))
-                .toList(),
-          );
-
-  Stream<List<ProductModel>> getProductsById(
-      {required String categoryId}) async* {
+  Stream<List<ProductModel>> getProducts(String categoryId) async* {
     if (categoryId.isEmpty) {
       yield* FirebaseFirestore.instance.collection("products").snapshots().map(
-            (querySnapshot) => querySnapshot.docs
-                .map((doc) => ProductModel.fromJson(doc.data()))
-                .toList(),
-          );
+            (event1) => event1.docs
+            .map((doc) => ProductModel.fromJson(doc.data()))
+            .toList(),
+      );
     } else {
       yield* FirebaseFirestore.instance
           .collection("products")
           .where("categoryId", isEqualTo: categoryId)
           .snapshots()
-          .map((querySnapshot) => querySnapshot.docs
-              .map((doc) => ProductModel.fromJson(doc.data()))
-              .toList());
+          .map(
+            (event1) => event1.docs
+            .map((doc) => ProductModel.fromJson(doc.data()))
+            .toList(),
+      );
     }
   }
 
@@ -119,41 +117,34 @@ class ProductsProvider with ChangeNotifier {
 
   Future<void> updateProduct({
     required BuildContext context,
-    required String categoryId,
-    required String productCurrency,
-    required List<String> imageUrls,
+    required String imagePath,
+    required ProductModel productModel,
   }) async {
     String name = productNameController.text;
-    String productDesc = productDescController.text;
-    String priceText = productPriceController.text;
-    String countText = productCountController.text;
+    String categoryDesc = productPriceController.text;
 
-    if (name.isNotEmpty &&
-        productDesc.isNotEmpty &&
-        priceText.isNotEmpty &&
-        countText.isNotEmpty) {
-      ProductModel productModel = ProductModel(
-        count: int.parse(countText),
-        price: int.parse(priceText),
-        productImages: imageUrls,
-        categoryId: categoryId,
-        productId: "",
-        productName: name,
-        description: productDesc,
-        createdAt: DateTime.now().toString(),
-        currency: productCurrency,
-      );
-
+    if (name.isNotEmpty && categoryDesc.isNotEmpty) {
       showLoading(context: context);
-      UniversalData universalData =
-          await productsService.updateProduct(productModel: productModel);
+      UniversalData universalData = await productsService.updateProduct(
+        productModel: ProductModel(
+          count: 1,
+          price: 23,
+          productImages: [],
+          categoryId: productModel.categoryId,
+          createdAt: productModel.createdAt,
+          productName: productNameController.text,
+          description: productPriceController.text,
+          productId: productModel.productId,
+          currency: "SO'M",
+        ),
+      );
       if (context.mounted) {
         hideLoading(dialogContext: context);
       }
       if (universalData.error.isEmpty) {
         if (context.mounted) {
           showMessage(context, universalData.data as String);
-          clearTexts();
+          clearParameters();
           Navigator.pop(context);
         }
       } else {
@@ -161,25 +152,39 @@ class ProductsProvider with ChangeNotifier {
           showMessage(context, universalData.error);
         }
       }
-    } else {
-      showMessage(context, "Maydonlar to'liq emas!!!");
     }
   }
 
-  setInitialValues(ProductModel productModel) {
-    productNameController =
-        TextEditingController(text: productModel.productName);
-    productPriceController =
-        TextEditingController(text: productModel.price.toString());
-    productDescController =
-        TextEditingController(text: productModel.description);
-    productCountController =
-        TextEditingController(text: productModel.count.toString());
+  Future<void> uploadProductImages({
+    required BuildContext context,
+    required List<XFile> images,
+  }) async {
+    showLoading(context: context);
 
+    for (var element in images) {
+      UniversalData data = await FileUploader.imageUploader(element);
+      if (data.error.isEmpty) {
+        uploadedImagesUrls.add(data.data as String);
+      }
+    }
+
+    notifyListeners();
+
+    if (context.mounted) {
+      hideLoading(dialogContext: context);
+    }
+  }
+
+  setInitialValues(CategoryModel categoryModel) {
+    productNameController =
+        TextEditingController(text: categoryModel.categoryName);
+    productPriceController =
+        TextEditingController(text: categoryModel.description);
     notifyListeners();
   }
 
-  clearTexts() {
+  clearParameters() {
+    uploadedImagesUrls = [];
     productPriceController.clear();
     productNameController.clear();
     productDescController.clear();

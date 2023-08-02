@@ -139,7 +139,7 @@ class _ProductsUserScreenState extends State<ProductsUserScreen> {
             child: Padding(
               padding: const EdgeInsets.all(18.0),
               child: StreamBuilder<List<ProductModel>>(
-                stream: context.read<ProductsProvider>().getProductsById(categoryId: selectedCategoryId),
+                stream: context.read<ProductsProvider>().getProducts(selectedCategoryId),
                 builder:
                     (BuildContext context, AsyncSnapshot<List<ProductModel>> snapshot) {
                   if (snapshot.hasData) {

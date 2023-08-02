@@ -34,6 +34,8 @@ class _TabBoxUserScreenState extends State<TabBoxUserScreen> {
             BottomNavigationBarItem(
                 icon: Icon(Icons.production_quantity_limits, size: 30), label: "Products"),
             BottomNavigationBarItem(
+                icon: Icon(Icons.shopping_cart, size: 30), label: "Basket"),
+            BottomNavigationBarItem(
                 icon: Icon(Icons.person, size: 30), label: "Profile"),
           ],
         ),

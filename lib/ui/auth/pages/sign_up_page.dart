@@ -10,7 +10,6 @@ import 'package:texno_bozor/ui/auth/widgets/global_text_fields.dart';
 import 'package:texno_bozor/utils/app_icon.dart';
 import 'package:texno_bozor/utils/colors.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
-import 'package:texno_bozor/utils/colors.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key, required this.onChanged});

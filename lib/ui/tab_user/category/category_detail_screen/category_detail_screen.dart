@@ -37,8 +37,8 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
             child: Padding(
               padding: const EdgeInsets.all(18.0),
               child: StreamBuilder<List<ProductModel>>(
-                stream: context.read<ProductsProvider>().getProductsById(
-                    categoryId: widget.categoryModel.categoryId),
+                stream: context.read<ProductsProvider>().getProducts(
+                    widget.categoryModel.categoryId),
                 builder: (BuildContext context,
                     AsyncSnapshot<List<ProductModel>> snapshot) {
                   if (snapshot.hasData) {

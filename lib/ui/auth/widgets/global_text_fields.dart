@@ -4,7 +4,7 @@ import 'package:texno_bozor/utils/colors.dart';
 
 // ignore: must_be_immutable
 class GlobalTextField extends StatefulWidget {
-  GlobalTextField({
+   GlobalTextField({
     Key? key,
     required this.hintText,
     required this.keyboardType,
