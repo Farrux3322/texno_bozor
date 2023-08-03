@@ -45,7 +45,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                           margin: EdgeInsets.symmetric(vertical: 10.h,horizontal: 15.w),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(16.r),
-                              color: Colors.blue.withOpacity(0.5)
+                              color: Color(0xFF22222A)
                           ),
                           child: ListTile(
                             onTap: (){

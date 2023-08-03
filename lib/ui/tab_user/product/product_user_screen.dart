@@ -58,7 +58,7 @@ class _ProductsUserScreenState extends State<ProductsUserScreen> {
                                   color: selectedCategoryId ==
                                       ""
                                       ? Colors.yellowAccent
-                                      : Colors.white,
+                                      : Color(0xFF22222A),
                                 ),
                                 height: 60,
                                 margin: const EdgeInsets.all(5),
@@ -71,7 +71,7 @@ class _ProductsUserScreenState extends State<ProductsUserScreen> {
                                       color: selectedCategoryId ==
                                           ""
                                           ? Colors.red
-                                          : Colors.black,
+                                          : Colors.white,
                                     ),
                                   ),
                                 ),
@@ -95,7 +95,7 @@ class _ProductsUserScreenState extends State<ProductsUserScreen> {
                                             color: selectedCategoryId ==
                                                 categoryModel.categoryId
                                                 ? Colors.yellowAccent
-                                                : Colors.white,
+                                                : Color(0xFF22222A),
                                           ),
                                           height: 60,
                                           margin: const EdgeInsets.all(5),
@@ -108,7 +108,7 @@ class _ProductsUserScreenState extends State<ProductsUserScreen> {
                                                 color: selectedCategoryId ==
                                                     categoryModel.categoryId
                                                     ? Colors.red
-                                                    : Colors.black,
+                                                    : Colors.white,
                                               ),
                                             ),
                                           ),
@@ -161,7 +161,7 @@ class _ProductsUserScreenState extends State<ProductsUserScreen> {
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(16),
-                                color: Colors.blue.withOpacity(0.8)
+                                color:const Color(0xFF22222A)
                               ),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -184,7 +184,7 @@ class _ProductsUserScreenState extends State<ProductsUserScreen> {
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
-                                      Text(productModel.productName,style: TextStyle(fontSize: 22.spMin,color: Colors.black,fontWeight: FontWeight.w700),),
+                                      Text(productModel.productName,style: TextStyle(fontSize: 22.spMin,color: Colors.blue,fontWeight: FontWeight.w700),),
                                       SizedBox(height: 10.h,),
                                       Text(productModel.description,style: TextStyle(fontSize: 18.spMin,color: Colors.white,fontWeight: FontWeight.w500),),
                                       SizedBox(height: 10.h,),

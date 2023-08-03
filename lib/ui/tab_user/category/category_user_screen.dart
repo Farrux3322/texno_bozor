@@ -37,7 +37,7 @@ class _CategoryUserScreenState extends State<CategoryUserScreen> {
                     padding: EdgeInsets.all(8.h),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
-                      color: Colors.blue.withOpacity(0.8),
+                      color: Color(0xFF22222A)
                     ),
                     child: ListTile(
                       onTap: (){
@@ -53,7 +53,7 @@ class _CategoryUserScreenState extends State<CategoryUserScreen> {
                           errorWidget: (context, url, error) => const Icon(Icons.error),
                         ),
                       ),
-                      title: Text(categoryModel.categoryName,style: TextStyle(fontSize: 24.spMin,color: Colors.black,fontWeight: FontWeight.w700),),
+                      title: Text(categoryModel.categoryName,style: TextStyle(fontSize: 24.spMin,color: Colors.blue,fontWeight: FontWeight.w700),),
                       subtitle: Text(categoryModel.description,style: TextStyle(fontSize: 18.spMin,color: Colors.white,fontWeight: FontWeight.w500),),
                     ),
                   );

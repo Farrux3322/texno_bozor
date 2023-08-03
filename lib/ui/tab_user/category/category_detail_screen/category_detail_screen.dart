@@ -68,7 +68,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                                   child: Container(
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(16),
-                                        color: Colors.blue.withOpacity(0.8)),
+                                        color: Color(0xFF22222A),),
                                     child: Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
@@ -104,7 +104,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                                               productModel.productName,
                                               style: TextStyle(
                                                   fontSize: 22.spMin,
-                                                  color: Colors.black,
+                                                  color: Colors.blue,
                                                   fontWeight: FontWeight.w700),
                                             ),
                                             SizedBox(
