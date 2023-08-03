@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -39,19 +40,25 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             Expanded(child: ListView(
               physics: const ScrollPhysics(),
               children: [
-                Hero(
-                  tag: widget.index,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(25.r),
-                    child: CachedNetworkImage(
-                      height: 250.h,
-                      width: 250.h,
-                      imageUrl: widget.productModel.productImages.first,
-                      placeholder: (context, url) => const CupertinoActivityIndicator(),
-                      errorWidget: (context, url, error) => const Icon(Icons.error),
+                CarouselSlider(
+                  items: List.generate(widget.productModel.productImages.length, (index) => ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: CachedNetworkImage(
+                          imageUrl: widget.productModel.productImages[index],
+                          fit: BoxFit.cover,
+
+                        )
                     ),
-                  ),
-                ),
+                  )), options: CarouselOptions(
+                  height: 250.h,
+                    autoPlay: true,
+                    aspectRatio: 2.0,
+                    enlargeCenterPage: true
+                ),),
                 SizedBox(height: 20.h,),
                 Text(widget.productModel.productName,style: TextStyle(fontSize: 32.spMin,color: Colors.white,fontWeight: FontWeight.w700),),
                 SizedBox(height: 20.h,),
@@ -125,3 +132,4 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 }
+

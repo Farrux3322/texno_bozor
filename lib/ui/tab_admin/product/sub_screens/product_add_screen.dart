@@ -242,20 +242,26 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
                   ),
                   const SizedBox(height: 24),
                   context.watch<ProductsProvider>().uploadedImagesUrls.isEmpty
-                      ? TextButton(
+                      ? Container(
+                    padding: EdgeInsets.all(20.r),
+                        height: 80.h,
+                        child: TextButton(
                     onPressed: () {
-                      showBottomSheetDialog();
+                        showBottomSheetDialog();
                     },
                     style: TextButton.styleFrom(
-                        backgroundColor:
-                        Theme.of(context).indicatorColor),
-                    child: const Text(
-                      "Select Image",
-                      style: TextStyle(color: Colors.black),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                          backgroundColor:
+                         const Color(0xFF0909E7)),
+                    child:const Center(
+                      child:  Text(
+                          "Select Image",
+                          style: TextStyle(color: Colors.white),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                  )
+                  ),
+                      )
                       : SizedBox(
                     height: 100,
                     child: ListView(
@@ -308,43 +314,46 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
                 ],
               ),
             ),
-            GlobalButton(
-                title: widget.productModel == null
-                    ? "Add product"
-                    : "Update product",
-                onTap: () {
-                  if (context
-                      .read<ProductsProvider>()
-                      .uploadedImagesUrls
-                      .isNotEmpty &&
-                      selectedCategoryId.isNotEmpty) {
-                    context.read<ProductsProvider>().addProduct(
-                      context: context,
-                      categoryId: selectedCategoryId,
-                      productCurrency: selectedCurrency,
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        duration: Duration(milliseconds: 500),
-                        backgroundColor: Colors.red,
-                        margin: EdgeInsets.symmetric(
-                          vertical: 100,
-                          horizontal: 20,
-                        ),
-                        behavior: SnackBarBehavior.floating,
-                        content: Text(
-                          "Ma'lumotlar to'liq emas!!!",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 22,
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: GlobalButton(
+                  title: widget.productModel == null
+                      ? "Add product"
+                      : "Update product",
+                  onTap: () {
+                    if (context
+                        .read<ProductsProvider>()
+                        .uploadedImagesUrls
+                        .isNotEmpty &&
+                        selectedCategoryId.isNotEmpty) {
+                      context.read<ProductsProvider>().addProduct(
+                        context: context,
+                        categoryId: selectedCategoryId,
+                        productCurrency: selectedCurrency,
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          duration: Duration(milliseconds: 500),
+                          backgroundColor: Colors.red,
+                          margin: EdgeInsets.symmetric(
+                            vertical: 100,
+                            horizontal: 20,
+                          ),
+                          behavior: SnackBarBehavior.floating,
+                          content: Text(
+                            "Ma'lumotlar to'liq emas!!!",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 22,
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  }
-                }),
+                      );
+                    }
+                  }),
+            ),
             SizedBox(height: 20.h,)
           ],
         ),
